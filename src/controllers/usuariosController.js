@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/id/:id", (req, res) => {
     const id = req.params.id;
     const query = `Select * from Usuarios where id_usuario = ?`;
     dbConnection.query(query, [id], (err, results) => {
@@ -30,7 +30,7 @@ router.get('/login', (req, res) => {
         if (err){
             throw err;
         }
-
+ 
         res.json(results);
     });
 })
