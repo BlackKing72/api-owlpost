@@ -19,7 +19,9 @@ router.get("/id/:id", (req, res) => {
         if (err)
             throw err;
 
-        res.json(results);
+        res.json({
+            user: results[0]
+        });
     });
 });
 
@@ -32,6 +34,22 @@ router.get('/login', (req, res) => {
         }
  
         res.json(results);
+    });
+})
+
+router.post('/login', (req, res) => {
+    const { email, senha } = req.body;
+    const query = "select * from usuarios where email = ? and senha = md5(?)";
+    dbConnection.query(query, [email, senha], (err, results) => {
+        if (err){
+            throw err;
+        }
+
+ 
+        res.json({
+            results: results,
+            userID: results[0].id_usuario,
+        });
     });
 })
 
