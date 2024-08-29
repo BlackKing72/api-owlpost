@@ -29,19 +29,6 @@ router.get("/id/:id", (req, res) => {
     });
 });
 
-router.get('/login', (req, res) => {
-    const { email, senha } = req.body;
-    const query = "select * from usuarios where email = ? and senha = md5(?)";
-    dbConnection.query(query, [email, senha], (err, results) => {
-        if (err){
-            console.error(err);
-            return;
-        }
- 
-        res.json(results);
-    });
-})
-
 router.post('/login', (req, res) => {
     const { email, senha } = req.body;
     const query = "select * from usuarios where email = ? and senha = md5(?)";
@@ -62,7 +49,7 @@ router.post('/login', (req, res) => {
 
 router.put('/', (req, res) => {
     const { nome, email, senha, foto_perfil } = req.body;
-    const query = `insert into usuarios (nome, email, senha, foto_perfil) values (?, ?, ?, ?);`
+    const query = `insert into usuarios (nome, email, senha, foto_perfil) values (?, ?, md5(?), ?);`
     dbConnection.query(query, [nome, email, senha, foto_perfil], (err, results) => {
         if (err){
             console.error(err);
