@@ -5,8 +5,10 @@ const router = express.Router();
 router.get("/", (req, res) => {
     const query = `Select * from Usuarios`;
     dbConnection.query(query, (err, results) => {
-        if (err)
-            throw err;
+        if (err){
+            console.error(err);
+            return;
+        }
 
         res.json(results);
     });
@@ -16,8 +18,10 @@ router.get("/id/:id", (req, res) => {
     const id = req.params.id;
     const query = `Select * from Usuarios where id_usuario = ?`;
     dbConnection.query(query, [id], (err, results) => {
-        if (err)
-            throw err;
+        if (err){
+            console.error(err);
+            return;
+        }
 
         res.json({
             user: results[0]
@@ -30,7 +34,8 @@ router.get('/login', (req, res) => {
     const query = "select * from usuarios where email = ? and senha = md5(?)";
     dbConnection.query(query, [email, senha], (err, results) => {
         if (err){
-            throw err;
+            console.error(err);
+            return;
         }
  
         res.json(results);
@@ -41,14 +46,16 @@ router.post('/login', (req, res) => {
     const { email, senha } = req.body;
     const query = "select * from usuarios where email = ? and senha = md5(?)";
     dbConnection.query(query, [email, senha], (err, results) => {
-        if (err){
-            throw err;
+        if (err) {
+            console.error(err);
+            return;
         }
 
+        const userID = results[0] ? results[0].id_usuario : undefined;
  
         res.json({
             results: results,
-            userID: results[0].id_usuario,
+            userID: userID,
         });
     });
 })
@@ -58,7 +65,8 @@ router.put('/', (req, res) => {
     const query = `insert into usuarios (nome, email, senha, foto_perfil) values (?, ?, ?, ?);`
     dbConnection.query(query, [nome, email, senha, foto_perfil], (err, results) => {
         if (err){
-            throw err;
+            console.error(err);
+            return;
         }
 
         res.json(results);
@@ -70,7 +78,8 @@ router.patch('/', (req, res) => {
     const query = `update usuarios set foto_perfil = ? where id_usuario = ?;`
     dbConnection.query(query, [foto_perfil, id], (err, results) => {
         if (err){
-            throw err;
+            console.error(err);
+            return;
         }
 
         res.json(results);
