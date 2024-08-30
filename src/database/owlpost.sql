@@ -58,7 +58,7 @@ create table Logins (
 	id_usuario int,
 	logado bool,
 	ultimo_login timestamp default current_timestamp,
-	foreign key(id_usuario) references  Usuarios(id_usuario)
+	foreign key(id_usuario) references Usuarios(id_usuario)
 );
 
 -- Dados de teste
