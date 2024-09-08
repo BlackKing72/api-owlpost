@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.post('/', (req, res) => {
     const { email, senha } = req.body;
-    const querySelect = "select * from usuarios where email = ? and senha = md5(?)";
-    const queryInsert = "insert into logins (id_usuario, logado) values (?, ?)";
+    const querySelect = "select * from Usuarios where email = ? and senha = md5(?)";
+    const queryInsert = "insert into Logins (id_usuario, logado) values (?, ?)";
 
     dbConnection.query(querySelect, [email, senha], (err, results) => {
         if (err) {
@@ -27,8 +27,8 @@ router.post('/', (req, res) => {
 
 router.patch('/:id_usuario', (req, res) => {
     const id_usuario = req.params.id_usuario;
-    const queryLogado = `select * from logins where id_usuario = ?`;
-    const query = `update logins set logado = ? where id_usuario = ?`;
+    const queryLogado = `select * from Logins where id_usuario = ?`;
+    const query = `update Logins set logado = ? where id_usuario = ?`;
 
     dbConnection.query(queryLogado, [id_usuario], (err, results) => {
         if (err) {
@@ -50,7 +50,7 @@ router.patch('/:id_usuario', (req, res) => {
 
 router.delete('/:id_usuario', (req, res) => {
     const id_usuario = req.params.id_usuario;
-    const query = `delete from logins where id_usuario = ?`;
+    const query = `delete from Logins where id_usuario = ?`;
     dbConnection.query(query, [id_usuario], (err, results) => {
         if (err) {
             throw err;

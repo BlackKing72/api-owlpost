@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const query = `select * from conquistas`;
+    const query = `select * from Conquistas`;
     dbConnection.query(query, (err, results) => {
         if (err) {
             throw err;
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-    const query = `select * from conquistas where id_conquista = ?`;
+    const query = `select * from Conquistas where id_conquista = ?`;
     dbConnection.query(query, [id], (err, results) => {
         if (err) {
             throw err;
@@ -27,7 +27,7 @@ router.get('/:id', (req, res) => {
 
 router.get('/jogo/:id', (req, res) => {
     const id = req.params.id;
-    const query = `select * from conquistas where id_jogo = ?`;
+    const query = `select * from Conquistas where id_jogo = ?`;
     dbConnection.query(query, [id], (err, results) => {
         if (err) {
             throw err;
@@ -39,7 +39,7 @@ router.get('/jogo/:id', (req, res) => {
 
 router.put('/', (req, res) => {
     const { nome, descricao, foto_conquista, id_jogo } = req.body;
-    const query = `insert into conquistas (nome, descricao, foto_conquista, id_jogo) values (?, ?, ?, ?);`
+    const query = `insert into Conquistas (nome, descricao, foto_conquista, id_jogo) values (?, ?, ?, ?);`
     dbConnection.query(query, [nome, descricao, foto_conquista, id_jogo], (err, results) => {
         if (err) {
             throw err;
