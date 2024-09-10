@@ -1,3 +1,5 @@
+drop database owlpost;
+
 create database owlpost;
 
 use owlpost;
@@ -55,7 +57,7 @@ create table ConquistasDesbloqueadas (
 
 create table Logins (
 	id int primary key auto_increment,
-	id_usuario int,
+	id_usuario int not null,
 	logado bool,
 	ultimo_login timestamp default current_timestamp,
 	foreign key(id_usuario) references Usuarios(id_usuario)
@@ -84,6 +86,7 @@ insert into usuarios (nome, email, senha, foto_perfil) values ('Aqua ^v^', '^v^@
 select * from usuarios u;
 
 select * from Logins l;
+
 
 -- remove os usuários criados pela api e deixa os 4 usuários de teste.
 delete from usuarios where id_usuario > 4;
