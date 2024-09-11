@@ -1,5 +1,9 @@
+const expressFileUpload = require('express-fileupload');
 const express = require('express');
 const cors = require('cors');
+
+const fs = require('fs');
+const path = require('path');
 
 const owlpostRouter = require('./routes/owlpostRouter');
 
@@ -12,7 +16,16 @@ app.use(cors({
     allowedHeaders: ['Content-Type']
 }));
 app.use(express.json());
+app.use(expressFileUpload());
 app.use('/', owlpostRouter);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
+
 
 app.get('/', (req, res) => {
     res.send('UwU');
