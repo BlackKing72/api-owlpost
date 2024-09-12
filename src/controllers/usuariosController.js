@@ -1,28 +1,52 @@
 const dbConnection = require('../models/dbConnection');
+const httpStatus = require('../models/httpStatus');
+
 const express = require('express');
 const router = express.Router();
 
-const path = require('path');
-
+/* 
+Retorna todos os usuários presentes no banco de dados. 
+*/
 router.get("/", (req, res) => {
-    const query = `Select * from Usuarios`;
+    const query = `select * from Usuarios`;
     dbConnection.query(query, (err, results) => {
-        if (err){
-            console.error(err);
-            return;
+        if (err) {
+            console.error(`Erro ao buscar usuários no banco de dados. ${err}`);
+            return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao buscar usuários no banco de dados.' });
         }
 
         res.json(results);
     });
 });
 
-router.get("/id/:id", (req, res) => {
-    const id = req.params.id;
-    const query = `Select * from Usuarios where id_usuario = ?`;
+/* 
+Retorna um único usuário com o id correspondente ou null se ele não existir 
+no banco de dados. 
+*/
+router.get("/:id", (req, res) => {
+    const { id } = req.params;
+
+    if (id <= 0 || isNaN(id)) {
+        return res
+            .status(httpStatus.BadRequestStatus)
+            .json({ message: 'ID de usuário invalido.' });
+    }
+
+    const query = `select * from Usuarios where id = ?`;
     dbConnection.query(query, [id], (err, results) => {
-        if (err){
-            console.error(err);
-            return;
+        if (err) {
+            console.error(`Erro ao buscar usuário no banco de dados. ${err}`);
+            return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao buscar usuário no banco de dados.' });
+        }
+
+        if (results.length === 0) {
+            return res
+                .status(httpStatus.NotFound)
+                .json({ message: 'Usuário não encontrado' });
         }
 
         res.json({
@@ -31,82 +55,62 @@ router.get("/id/:id", (req, res) => {
     });
 });
 
-router.post('/login', (req, res) => {
-    const { email, senha } = req.body;
-    const query = "select * from Usuarios where email = ? and senha = md5(?)";
-    dbConnection.query(query, [email, senha], (err, results) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        const userID = results[0] ? results[0].id_usuario : undefined;
- 
-        res.json({
-            results: results,
-            userID: userID,
-        });
-    });
-})
-
-router.put('/alt', (req, res) => {
-    const { nome, email, senha } = req.body;
-    const profilePic = req.files.profilePic;
-
-    console.log(profilePic);
-
-    const uploadsDir = path.join(__dirname, '..', 'uploads');
-
-    const extension = path.extname(profilePic.name);
-    const imageName = `user_${nome}_${Date.now()}${extension}`;
-    const imagePath = path.join(uploadsDir, imageName);
-
-    console.log(imagePath);
-
-    profilePic.mv(imagePath, (err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Erro ao salvar a imagem no servidor.' });
-        }
-
-        console.log('criando o usuário na tabela.');
-
-        const query = `insert into Usuarios (nome, email, senha, foto_perfil) values (?, ?, md5(?), ?);`
-        dbConnection.query(query, [nome, email, senha, imageName], (err, results) => {
-            if (err){
-                return res.status(500).json({ message: 'Erro ao criar usuário no banco de dados.'});
-            }
-
-            console.log(results);
-    
-            res.json(results);
-        });
-    })
-})
-
+/* 
+Cria um novo usuário. Usa o form-data para enviar a imagem para 
+o banco de dados como binário.
+*/
 router.put('/', (req, res) => {
-    const { nome, email, senha, foto_perfil } = req.body;
-    const query = `insert into Usuarios (nome, email, senha, foto_perfil) values (?, ?, md5(?), ?);`
-    dbConnection.query(query, [nome, email, senha, foto_perfil], (err, results) => {
-        if (err){
-            console.error(err);
-            return;
+    const { nome, email, senha } = req.body;
+
+    // todo: validar email e senha
+
+    // a foto de perfil não vem no body pelo body pq está usando o form-data.
+    const fotoPerfil = req.files.fotoPerfil;    // o buffer contendo a imagem.
+    const fotoFormato = fotoPerfil.mimetype;    // mimetype é o formato da imagem. ex: imagem/png.
+    const fotoPerfilBuffer = fotoPerfil.data;   // o binário que vai ser salvo no banco.
+
+    const query = `insert into Usuarios (nome, email, senha, fotoPerfil, fotoFormato) values (?, ?, md5(?), ?, ?);`
+    dbConnection.query(query, [nome, email, senha, fotoPerfilBuffer, fotoFormato], (err, results) => {
+        if (err) {
+            console.error(`Erro ao criar usuário no banco de dados. ${err}`);
+            return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao criar usuário no banco de dados.' });
         }
 
         res.json(results);
     });
-})
+});
 
+/* 
+Atualiza a foto de perfil do usuário. Usa o form-data para enviar a imagem para 
+o banco de dados como binário.
+*/
 router.patch('/', (req, res) => {
-    const { id, foto_perfil } = req.body;
-    const query = `update Usuarios set foto_perfil = ? where id_usuario = ?;`
-    dbConnection.query(query, [foto_perfil, id], (err, results) => {
-        if (err){
-            console.error(err);
-            return;
+    const { id } = req.body;
+
+    if (id <= 0 || isNaN(id)) {
+        return res
+            .status(httpStatus.BadRequestStatus)
+            .json({ message: 'ID de usuário invalido.' });
+    }
+
+    // a foto de perfil não vem no body pelo body pq está usando o form-data.
+    const fotoPerfil = req.files.fotoPerfil;    // o buffer contendo a imagem.
+    const fotoFormato = fotoPerfil.mimetype;    // mimetype é o formato da imagem. ex: imagem/png.
+    const fotoPerfilBuffer = fotoPerfil.data;   // o binário que vai ser salvo no banco.
+    
+    const query = `update Usuarios set fotoFormato = ?, fotoPerfil = ? where id = ?;`
+    dbConnection.query(query, [fotoPerfilBuffer, fotoFormato, id], (err, results) => {
+        if (err) {
+            console.error(`Erro ao tentar atualizar a foto de perfil. ${err}`);
+            return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao tentar atualizar a foto de perfil.' });
         }
 
         res.json(results);
     });
-})
+});
 
 module.exports = router;

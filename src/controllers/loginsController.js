@@ -1,63 +1,78 @@
 const dbConnection = require('../models/dbConnection');
+const httpStatus = require('../models/httpStatus');
+
 const express = require('express');
 const router = express.Router();
 
+/*
+Cria um novo login ou atualiza o status do login antigo.
+*/
 router.post('/', (req, res) => {
     const { email, senha } = req.body;
-    const querySelect = "select * from Usuarios where email = ? and senha = md5(?)";
-    const queryInsert = "insert into Logins (id_usuario, logado) values (?, ?)";
 
-    dbConnection.query(querySelect, [email, senha], (err, results) => {
+    const querySelect = "select * from Usuarios where email = ? and senha = md5(?)";
+    dbConnection.query(querySelect, [email, senha], (err, usuarios) => {
         if (err) {
-            throw err;
+            return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao tentar buscar um usuário.', error: err });
         }
-        
-        dbConnection.query(queryInsert, [results[0].id_usuario, true], (err, r) => {
+
+        if (usuarios.length === 0) {
+            return res
+                .status(httpStatus.NotFound)
+                .json({ message: 'Login do usuário não encontrado' });
+        }
+
+        // replace - se já existir um campo com uma PRIMARY KEY ou UNIQUE KEY ele
+        // substitui, senão ele cria um novo. Neste caso idUsuario é uma UNIQUE KEY
+        // então o replace funciona.
+        const queryInsert = "replace into Logins (idUsuario, logado) values (?, ?)";
+        dbConnection.query(queryInsert, [usuarios[0].id, true], (err, results) => {
             if (err) {
-                throw err;
+                return res
+                    .status(httpStatus.InternalServerError)
+                    .json({ message: 'Erro ao tentar criar ou atualizar o login', error: err });
             }
     
             res.json({
-                results: r,
-                userID: results[0].id_usuario
+                userID: usuarios[0].id
             });
         });
     });
 });
 
-router.patch('/:id_usuario', (req, res) => {
-    const id_usuario = req.params.id_usuario;
-    const queryLogado = `select * from Logins where id_usuario = ?`;
-    const query = `update Logins set logado = ? where id_usuario = ?`;
-
-    dbConnection.query(queryLogado, [id_usuario], (err, results) => {
+/*
+Atualiza o status de um login.
+*/
+router.patch('/', (req, res) => {
+    const { id, logado } = req.body;
+    
+    const querySelect = `select * from Logins where idUsuario = ?`;
+    dbConnection.query(querySelect, [id], (err, results) => {
         if (err) {
-            throw err;
+            return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao tentar buscar um login', error: err});
         }
 
-        const logado = results[0].logado === 1;
+        if (results.length === 0) {
+            return res
+            .status(httpStatus.NotFound)
+            .json({ message: 'Login não encontrado' });
+        }
         
-        dbConnection.query(query, [!logado, id_usuario], (err, results) => {
+        const queryUpdate = `update Logins set logado = ?, ultimaAtividade = current_timestamp where idUsuario = ?`;
+        dbConnection.query(queryUpdate, [logado, id], (err, results) => {
             if (err) {
-                throw err;
+                return res
+                .status(httpStatus.InternalServerError)
+                .json({ message: 'Erro ao tentar atualizar o status de um login', error: err});
             }
-    
+
             res.json(results);
         });
     });
-
 });
-
-router.delete('/:id_usuario', (req, res) => {
-    const id_usuario = req.params.id_usuario;
-    const query = `delete from Logins where id_usuario = ?`;
-    dbConnection.query(query, [id_usuario], (err, results) => {
-        if (err) {
-            throw err;
-        }
-
-        res.json(results);
-    });
-})
 
 module.exports = router;
