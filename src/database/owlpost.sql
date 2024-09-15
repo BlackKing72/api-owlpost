@@ -41,7 +41,7 @@ create table Postagens (
     idUsuario int not null,
     titulo varchar(255) not null,
     conteudo mediumtext not null,
-    estrelas int,
+    estrelas int default 0,
     fixado bool default false,    
     atualizado bool default false,
     ultimaAtividade timestamp default current_timestamp,
