@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     dbConnection.query(query, [ids], (err, results) => {
         if (err) {
             return res
-                .status(httpStatus.InternalServerError)
+                .status(httpStatus.InternalError)
                 .json({ message: 'Erro ao tentar buscar postagens.', erro: err });
         }
 
@@ -34,7 +34,7 @@ router.get('/user/', (req, res) => {
     dbConnection.query(query, [userID], (err, results) => {
         if (err) {
             return res
-                .status(httpStatus.InternalServerError)
+                .status(httpStatus.InternalError)
                 .json({ message: 'Erro ao tentar buscar postagens.', erro: err });
         }
 
@@ -76,7 +76,7 @@ router.get('/filter', (req, res) => {
     dbConnection.query(query, values, (err, results) => {
         if (err) {
             return res 
-                .status(httpStatus.InternalServerError)
+                .status(httpStatus.InternalError)
                 .json({ message: 'Erro ao tentar buscar posts com tags', erro: err });
         }
 

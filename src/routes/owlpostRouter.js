@@ -2,15 +2,19 @@ const express = require('express');
 const router = express.Router();
 
 const usuariosController = require('../controllers/usuariosController');
-const conquistasController = require('../controllers/conquistasController');
 const loginsController = require('../controllers/loginsController');
+const amigosController = require('../controllers/amigosController');
 const postagensController = require('../controllers/postagensController');
+
+const conquistasController = require('../controllers/conquistasController');
 const tagsController = require('../controllers/tagsController');
 
 router.use('/usuarios', usuariosController);
 router.use('/logins', loginsController);
-router.use('/conquistas', conquistasController);
+router.use('/amigos', amigosController);
 router.use('/postagens', postagensController);
+
+router.use('/conquistas', conquistasController);
 router.use('/tags', tagsController);
 
 module.exports = router;

@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     dbConnection.query(query, (err, results) => {
         if (err) {
             return res 
-                .status(httpStatus.InternalServerError)
+                .status(httpStatus.InternalError)
                 .json({ message: 'Erro ao tentar buscar tags', erro: err });
         }
 
@@ -34,7 +34,7 @@ router.get("/:postID", (req, res) => {
     dbConnection.query(query,[postID], (err, results) => {
         if (err) {
             return res 
-                .status(httpStatus.InternalServerError)
+                .status(httpStatus.InternalError)
                 .json({ message: 'Erro ao tentar buscar tags postadas', erro: err });
         }
 

@@ -15,7 +15,8 @@ create table Usuarios (
     email varchar(255) not null unique,
     senha text not null,
     fotoPerfil mediumblob,
-    fotoFormato varchar(20)
+    fotoFormato varchar(20),
+    admin bool default false
 );
 
 -- 'ultimaAtividade' combinado com o 'logado' pode ser usado para
@@ -25,9 +26,22 @@ create table Logins (
 	idUsuario int not null unique,
 	logado bool not null,
 	ultimaAtividade timestamp default current_timestamp,
+	
 	foreign key(idUsuario) references Usuarios(id) on delete cascade
 );
 
+create table Amigos (
+	idUsuario int not null,
+	idAmigo int not null,
+	
+	status enum('pedido', 'aceito', 'bloqueado') default 'pedido',
+	dataCriacao timestamp default current_timestamp,
+	
+	primary key (idUsuario, idAmigo),
+	
+	foreign key (idUsuario) references Usuarios(id) on delete cascade,
+	foreign key (idAmigo) references Usuarios(id) on delete cascade
+); 
 
 -- 'titulo': não é necessário ser maior que 255 caracteres.
 -- 'conteudo': é um mediumtext para caber postagens maiores de até 16MB
@@ -45,6 +59,7 @@ create table Postagens (
     fixado bool default false,    
     atualizado bool default false,
     ultimaAtividade timestamp default current_timestamp,
+    
     foreign key(idUsuario) references Usuarios(id) on delete cascade
 );
 
@@ -53,6 +68,8 @@ create table Tags (
     nome varchar(100) not null unique
 );
 
+-- Relaciona as tags com as postagens. Permite buscar posts que tenha 
+-- uma tag especifica, ou buscar tags que pertencem a um post.
 create table TagsPostadas (
 	idTag int not null,
 	idPost int not null,
@@ -63,40 +80,49 @@ create table TagsPostadas (
 	foreign key (idPost) references Postagens(id) on delete cascade
 );
 
--- Fim das tabelas atualizadas
-
 create table Jogos (
-    id_jogo int primary key auto_increment,
-    nome varchar(255),
-    descricao text,
-    foto_jogo text
+    id int primary key auto_increment,
+    nome varchar(255) not null,
+    descricao text not null,
+    fotoPerfil mediumblob,
+    fotoFormato varchar(20)
+);
+
+-- Relaciona os jogos com os jogadores. Permite buscar jogos que os usuários
+-- jogaram, ou quais usuários jogaram jogos especificos.
+create table Biblioteca (
+	idJogo int not null,
+	idUsuario int not null,
+	
+	primary key (idJogo, idUsuario),
+	
+	conquistas int default 0,
+	experiencia int default 0,
+	tempoDeJogo double default 0,
+	
+	foreign key (idJogo) references Jogos(id) on delete cascade,
+	foreign key (idUsuario) references Usuarios(id) on delete cascade
 );
 
 create table Conquistas (
-    id_conquista int primary key auto_increment,
-    nome varchar(255),
-    descricao text,
-    foto_conquista text,
-    id_jogo int,
-    foreign key(id_jogo) references Jogos(id_jogo)
+    id int primary key auto_increment,
+    idJogo int not null,
+    nome varchar(255) not null,
+    descricao text not null,
+    fotoPerfil mediumblob,
+    fotoFormato varchar(20),
+    
+    foreign key(idJogo) references Jogos(id) on delete cascade
 );
 
-
-
-
-
--- Testando os formatos que vamos usar pra guardar a foto.
---      alter table usuarios modify column foto_perfil mediumtext;
---      desc usuarios; 
-
-
-
 create table ConquistasDesbloqueadas (
-    id int primary key auto_increment,
-    id_conquista int,
-    id_usuario int,
-    foreign  key(id_conquista) references Conquistas(id_conquista),
-    foreign key(id_usuario) references  Usuarios(id)
+    idConquista int not null,
+    idUsuario int not null,
+    
+    primary key(idConquista, idUsuario),
+    
+    foreign key(idConquista) references Conquistas(id) on delete cascade,
+    foreign key(idUsuario) references Usuarios(id) on delete cascade
 );
 
 
