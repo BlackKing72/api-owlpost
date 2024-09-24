@@ -125,6 +125,77 @@ create table ConquistasDesbloqueadas (
     foreign key(idUsuario) references Usuarios(id) on delete cascade
 );
 
+create table QuestaoCalculo (
+    id int primary key auto_increment,
+    enunciado text not null
+);
+
+create table QuestaoRegraDeTres (
+    idQuestao int primary key,
+    prescricao double not null,
+    medicacao double not null,
+    diluente double not null,
+    prescricaoUnidade varchar(10) not null,
+    medicacaoUnidade varchar(10) not null,
+    diluenteUnidade varchar(10) not null,
+
+    foreign key (idQuestao) references QuestaoCalculo(id)
+);
+
+create table QuestaoGotejamento (
+    idQuestao int primary key,
+    volume double not null,
+    tempo double not null,
+    volumeUnidade varchar(10) not null,
+    tempoUnidade varchar(10) not null,
+    destinoUnidade varchar(10) not null,
+
+    foreign key (idQuestao) references QuestaoCalculo(id)
+)
+
+insert into QuestaoCalculo (enunciado) values
+('test01'),
+('test02'),
+('test03');
+
+select * from questaocalculo q;
+
+insert into questaoregradetres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values 
+(1, 1, 'ml', 1, 'ml', 1, 'ml'),
+(2, 2, 'ml', 2, 'ml', 2, 'ml');
+
+select * from questaoregradetres q;
+
+insert into questaogotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values
+(3, 3, 'l', 3, 'h', 'gotas');
+
+select * from questaogotejamento q;
+
+select * from questaocalculo qc
+	left join questaoregradetres qr on qc.id = qr.idQuestao
+	left join questaogotejamento qg on qc.id = qg.idQuestao;
+
+update questaocalculo qc 
+join questaoregradetres qr on qc.id = qr.idQuestao 
+set qc.enunciado = 'updates', qr.prescricao = 3, qr.prescricaoUnidade = 'g', qr.medicacao = 3, qr.medicacaoUnidade = 'g', qr.diluente = 3, qr.diluenteUnidade = 'g'
+where qc.id = 1;
+
+update questaocalculo qc 
+join questaogotejamento qg on qc.id = qg.idQuestao 
+set qc.enunciado = 'updates', qg.volume = 3, qg.volumeUnidade = 'l', qg.tempo = 3, qg.tempoUnidade = 'min', qg.destinoUnidade = 'microgotas'
+where qc.id = 3;
+
+update questaocalculo qc 
+left join questaoregradetres qr on qc.id = qr.idQuestao 
+left join questaogotejamento qg on qc.id = qg.idQuestao 
+set qc.enunciado = 'updates', 
+	qr.prescricao = 3, qr.prescricaoUnidade = 'g', qr.medicacao = 3, qr.medicacaoUnidade = 'g', qr.diluente = 3, qr.diluenteUnidade = 'g',
+	qg.volume = 3, qg.volumeUnidade = 'l', qg.tempo = 3, qg.tempoUnidade = 'min', qg.destinoUnidade = 'microgotas'
+where qc.id = 8;
+
+select * from questaocalculo qc
+	left join questaoregradetres qr on qc.id = qr.idQuestao
+	left join questaogotejamento qg on qc.id = qg.idQuestao;
 
 -- ----------------------------------------------------------------------------
 -- Para inserir os dados padrões para teste execute os outros scripts dentro
