@@ -139,7 +139,7 @@ create table QuestaoRegraDeTres (
     medicacaoUnidade varchar(10) not null,
     diluenteUnidade varchar(10) not null,
 
-    foreign key (idQuestao) references QuestaoCalculo(id)
+    foreign key (idQuestao) references QuestaoCalculo(id) on delete cascade
 );
 
 create table QuestaoGotejamento (
@@ -150,7 +150,7 @@ create table QuestaoGotejamento (
     tempoUnidade varchar(10) not null,
     destinoUnidade varchar(10) not null,
 
-    foreign key (idQuestao) references QuestaoCalculo(id)
+    foreign key (idQuestao) references QuestaoCalculo(id) on delete cascade
 )
 
 -- insert into QuestaoCalculo (enunciado) values
@@ -158,22 +158,21 @@ create table QuestaoGotejamento (
 -- ('test02'),
 -- ('test03');
 
--- select * from questaocalculo q;
 
 -- insert into questaoregradetres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values 
 -- (1, 1, 'ml', 1, 'ml', 1, 'ml'),
 -- (2, 2, 'ml', 2, 'ml', 2, 'ml');
-
--- select * from questaoregradetres q;
+ 
 
 -- insert into questaogotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values
 -- (3, 3, 'l', 3, 'h', 'gotas');
 
--- select * from questaogotejamento q;
 
--- select * from questaocalculo qc
--- 	left join questaoregradetres qr on qc.id = qr.idQuestao
--- 	left join questaogotejamento qg on qc.id = qg.idQuestao;
+select * from questaocalculo qc
+	left join questaoregradetres qr on qc.id = qr.idQuestao
+	left join questaogotejamento qg on qc.id = qg.idQuestao;
+
+delete from questaocalculo qc where id = 1;
 
 -- update questaocalculo qc 
 -- join questaoregradetres qr on qc.id = qr.idQuestao 

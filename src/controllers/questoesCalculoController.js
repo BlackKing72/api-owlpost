@@ -80,6 +80,7 @@ router.patch('/', (req, res) => {
     } = req.body;
 
     // pode juntar as duas queries e ignorar o tipo, ou deixar do jeito que está.
+    // mas separadas não precisa passar os dados para dois tipos de questões.
     if (tipo === 0) {
         const query = `update questaocalculo qc 
             join questaoregradetres qr on qc.id = qr.idQuestao 
@@ -117,4 +118,48 @@ router.patch('/', (req, res) => {
     }
 });
 
+/** url-api/calculo?id=1 */
+router.delete('/', (req, res) => {
+    const { id } = req.query;
+    const query = `delete from QuestaoCalculo where id = ?`;
+
+    dbConnection.query(query, [id], (err, results) => {
+        if (err) {
+            console.error(`Erro ao deletar questão. erro: ${err}`);
+            return;
+        }
+
+        res.json(results);
+    });
+});
+
 module.exports = router;
+
+/*
+{
+    // Modelo dos dados necessários para criar/atualizar as tabelas
+    // das questões.
+
+    // Isso sempre é necessário para todas as questões
+    "tipo": 0,                  // 0 - regra de três, 1 - gotejamento
+    "enunciado": "testando",    // funciona para todas as questões
+
+    // Se estiver editando alguma questão precisa passar o id
+    "id": 1,
+
+    // Só precisa preencher para questões de regra de três.
+    "prescricao": 6.6, 
+    "prescricaoUnidade": "mg", 
+    "medicacao": 6.6, 
+    "medicacaoUnidade": "mg", 
+    "diluente": 6.6, 
+    "diluenteUnidade": "mg",
+
+    // Só precisa preencher para questões de gotejamento.
+    "volume": 0.6, 
+    "volumeUnidade": "l", 
+    "tempo": 6.6, 
+    "tempoUnidade": "h", 
+    "destinoUnidade": "microgotas",
+}
+*/
