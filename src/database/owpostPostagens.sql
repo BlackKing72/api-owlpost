@@ -256,7 +256,7 @@ depressitque iussus luco. Generis curvi prensis et duos, parvis ventos.');
 
 insert into TagsPostadas (idTag, idPost) values (4, 9);
 
-select * from Tags t;
-select * from Postagens p;
-select * from TagsPostadas tp;
+-- select * from Tags t;
+-- select * from Postagens p;
+-- select * from TagsPostadas tp;
 

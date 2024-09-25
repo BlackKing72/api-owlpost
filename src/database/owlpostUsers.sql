@@ -6,4 +6,10 @@ insert into Usuarios (nome, email, senha, fotoPerfil, fotoFormato) values ('Megu
 insert into Usuarios (nome, email, senha, fotoPerfil, fotoFormato) values ('Megumin O.O!', 'o.o@email.com', md5('123'), null, null);
 insert into Usuarios (nome, email, senha, fotoPerfil, fotoFormato) values ('Aqua ^v^', '^v^@email.com', md5('123'), null, null);
 
-select * from Usuarios u;
+-- Comandos do banco de dados //////////////////////////////////////////////////
+-- select * from Usuarios;
+-- select * from Usuarios where id = ?;
+-- select * from Usuarios where email = ? and senha = md5(?);
+-- insert into Usuarios (nome, email, senha, fotoPerfil, fotoFormato) values (?, ?, ?, ?, ?);
+-- update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?;
+-- delete from Usuarios where id = ?;
