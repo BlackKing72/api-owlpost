@@ -31,6 +31,86 @@ router.post('/', (req, res) => {
         volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade
     } = req.body;
 
+    /* 
+        Iniciar uma transação com o banco de dados. Possibilita executar vários comandos
+        e se algum der erro desfazer as alterações feitas no banco.
+
+        Porque usar a transação?
+        São executados dois comandos no banco: 
+            - criar uma entrada QuestaoCalculo para criar o id da questão.
+            - criar uma QuestaoRegraDeTres/QuestaoGotejamento que usa esse id como chave primária.
+        Se o ultimo falha o banco já teria criado uma entrada invalida na tabela e provocaria
+        outros erros na API. Com a transação isso pode ser revertido quando um erro ocorrer.
+    */
+    dbConnection.beginTransaction((err) => {
+        if (err) {
+            console.error(`Erro ao iniciar transação para criar uma questão. erro: ${err}`);
+            return;
+        }
+
+        const queryQuestao = `insert into QuestaoCalculo (enunciado) values (?)`;
+        dbConnection.query(queryQuestao, [enunciado], (err, results) => {
+            if (err) {
+                // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
+                return dbConnection.rollback(() => {
+                    console.error(`Erro ao criar questão. erro: ${err}`);
+                });
+            }
+
+            const idQuestao = results.insertId;
+
+            let query = '';
+            let valores = [];
+
+            const questaoRegraDeTres = 0;
+            const questaoGotejamento = 1;
+
+            if (tipo === questaoRegraDeTres) {
+                query = `insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values (?, ?, ?, ?, ?, ?, ?)`;
+                valores = [idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade];
+            }
+            else if (tipo === questaoGotejamento) {
+                query = `insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values (?, ?, ?, ?, ?, ?)`;
+                valores = [idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade];
+            }
+            else {
+                // Para evitar que um tipo invalido seja inserido no banco
+                console.error(`Tipo da questão é inválido (${tipo}).`);
+                return;
+            }
+
+            dbConnection.query(query, valores, (err, results) => {
+                if (err) {
+                    // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
+                    return dbConnection.rollback(() => {
+                        console.error(`Erro ao criar questão. erro: ${err}`);
+                    });
+                }
+                
+                // Aplica as mudanças que ocorreram no banco durante a transação
+                dbConnection.commit((err) => {
+                    if (err) {
+                        // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
+                        return dbConnection.rollback(() => {
+                            console.error(`Erro ao criar questão. erro: ${err}`);
+                        });
+                    }   
+
+                    res.json(results);
+                });
+            });
+        });
+    });
+});
+
+/* 
+router.post('/', (req, res) => {
+    const { 
+        tipo, enunciado, 
+        prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade,
+        volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade
+    } = req.body;
+
     const queryQuestao = `insert into QuestaoCalculo (enunciado) values (?)`;
     dbConnection.query(queryQuestao, [enunciado], (err, results) => {
         if (err) {
@@ -70,7 +150,7 @@ router.post('/', (req, res) => {
             })
         }
     });
-});
+}); */
 
 router.patch('/', (req, res) => {
     const { id, tipo, enunciado, 
