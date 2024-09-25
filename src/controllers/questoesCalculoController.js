@@ -25,7 +25,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const { tipo, enunciado, 
+    const { 
+        tipo, enunciado, 
         prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade,
         volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade
     } = req.body;
@@ -40,8 +41,7 @@ router.post('/', (req, res) => {
         const idQuestao = results.insertId;
 
         if (tipo === 0) {
-            
-            const queryRegraDeTres = `insert into questaoregradetres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values (?, ?, ?, ?, ?, ?, ?)`;
+            const queryRegraDeTres = `insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values (?, ?, ?, ?, ?, ?, ?)`;
 
             dbConnection.query(queryRegraDeTres, [idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade], (err, results) => {
                 if (err) {
@@ -53,8 +53,7 @@ router.post('/', (req, res) => {
             });
         }
         else if (tipo === 1) {
-            
-            const queryGotejamento = `insert into questaogotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values (?, ?, ?, ?, ?, ?)`;
+            const queryGotejamento = `insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values (?, ?, ?, ?, ?, ?)`;
 
             dbConnection.query(queryGotejamento, [idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade], (err, results) => {
                 if (err) {
