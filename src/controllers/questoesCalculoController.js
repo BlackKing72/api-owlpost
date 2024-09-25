@@ -2,16 +2,25 @@ const dbConnection = require('../models/dbConnection');
 const express = require('express');
 const router = express.Router();
 
-// url-api/calculo -> busca todos os calculos
-// url-api/calculo?id=1 -> busca o calculo com id 1
+// url-api/calculo -> busca todos as questões.
+// url-api/calculo?id=1 -> busca a questão com id 1.
+// url-api/calculo?random=true -> busca uma única questão aleatória.
 router.get('/', (req, res) => {
-    const { id } = req.query;
+    const { id, random, count } = req.query;
     let query = `select * from QuestaoCalculo qc
 	    left join QuestaoRegraDeTres qr on qc.id = qr.idQuestao
 	    left join QuestaoGotejamento qg on qc.id = qg.idQuestao`;
 
     if (id) {
         query += ` where qc.id = ?`;
+    }
+    
+    if (random) {
+        query += ` order by rand()`;
+    }
+
+    if (count) {
+        query += ` limit ${count}`;
     }
 
     dbConnection.query(query, [id], (err, results) => {
