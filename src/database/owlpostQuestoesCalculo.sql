@@ -7,8 +7,8 @@ insert into QuestaoCalculo (id, enunciado) values
 (4, 'Para que 500 ml de soro fisiológico seja administrado em 6 horas, devem ser infundidas quantas gotas por minuto?');
 
 insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values 
-(1, 350, 'Miligramas', 1, 'Gramas', 5, 'Mililitros'),
-(2, 1.5, 'Miligramas', 2, 'Miligramas', 1, 'Mililitros');
+(1, 1.5, 'Miligramas', 2, 'Miligramas', 1, 'Mililitros'),
+(2, 350, 'Miligramas', 1, 'Gramas', 5, 'Mililitros');
 
 insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) value
 (3, 200, 'Mililitros', 30, 'Minutos', 'Microgotas'),
