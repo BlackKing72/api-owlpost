@@ -96,7 +96,10 @@ router.patch('/', (req, res) => {
     const fotoFormato = fotoPerfil.mimetype;    // mimetype é o formato da imagem. ex: imagem/png.
     const fotoPerfilBuffer = fotoPerfil.data;   // o binário que vai ser salvo no banco.
     
-    const query = `update Usuarios set fotoFormato = ?, fotoPerfil = ? where id = ?`;
+    console.log(fotoFormato);
+    console.log(fotoPerfil);
+
+    const query = `update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?`;
     dbConnection.query(query, [fotoPerfilBuffer, fotoFormato, id], (err, results) => {
         if (err) {
             return res.status(httpStatus.InternalError).json({ 
@@ -106,6 +109,23 @@ router.patch('/', (req, res) => {
 
         res.json({
             mensagem: `Foto de perfil atualizada com sucesso.`
+        });
+    });
+});
+
+router.patch('/delete', (req, res) => {
+    const { id } = req.body;
+
+    const query = `update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?`;
+    dbConnection.query(query, [null, null, id], (err, results) => {
+        if (err) {
+            return res.status(httpStatus.InternalError).json({ 
+                mensagem: `Erro ao tentar remover a foto de perfil. erro: ${err}` 
+            });
+        }
+
+        res.json({
+            mensagem: `Foto de perfil removida com sucesso.`
         });
     });
 });
