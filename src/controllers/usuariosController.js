@@ -96,9 +96,6 @@ router.patch('/', (req, res) => {
     const fotoFormato = fotoPerfil.mimetype;    // mimetype é o formato da imagem. ex: imagem/png.
     const fotoPerfilBuffer = fotoPerfil.data;   // o binário que vai ser salvo no banco.
     
-    console.log(fotoFormato);
-    console.log(fotoPerfil);
-
     const query = `update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?`;
     dbConnection.query(query, [fotoPerfilBuffer, fotoFormato, id], (err, results) => {
         if (err) {
