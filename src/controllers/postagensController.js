@@ -90,4 +90,21 @@ router.get('/filter', (req, res) => {
     });
 });
 
-module.exports = router
+router.post('/', (req, res) => {
+    const { userID, title, content } = req.body;
+    const query = `insert into Postagens (idUsuario, titulo, conteudo) values (?, ?, ?)`;
+
+    dbConnection.query(query, [userID, title, content], (err, results) => {
+        if (err) {
+            console.error(`Erro ao criar postagem. erro: ${err}`);
+            return;
+        }
+
+        res.json({
+            message: `Postagem criada com sucesso`,
+            postID: results.insertId
+        });
+    })
+})
+
+module.exports = router;
