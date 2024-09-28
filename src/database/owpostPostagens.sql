@@ -157,6 +157,7 @@ Este artigo traça a evolução histórica da hemoterapia no Brasil, desde seus 
 A hemoterapia no Brasil evoluiu significativamente desde suas primeiras práticas rudimentares. O país passou de um sistema desorganizado, com grandes disparidades na qualidade dos serviços, para um sistema moderno, fundamentado em princípios científicos, tecnológicos e éticos. A criação de hemocentros, a regulamentação da doação voluntária e os avanços na biotecnologia são marcos importantes que moldaram a hemoterapia contemporânea no Brasil.
 
 O século XXI apresenta novos desafios e oportunidades para a hemoterapia, incluindo o avanço da biologia molecular, engenharia genética e terapia celular, que prometem transformar ainda mais a prática.
+___
 
 [Para ver o artigo completo, clique aqui.](https://www.scielo.br/j/rbhh/a/KPf53b35B5jDZqSkmtJKkZj/?lang=pt#)');
 
@@ -219,12 +220,14 @@ A gestação não deve ser vista apenas como uma fase preparatória para a mater
 
 O estudo destaca a importância de entender a mulher gestante como uma mãe em plena formação, e não apenas como uma futura mãe. Essa perspectiva pode melhorar a qualidade das intervenções clínicas e o apoio psicológico oferecido às gestantes.
 
+___
+
 [Para ver o artigo completo, clique aqui.](https://www.scielo.br/j/pe/a/dmBvk536qGWLgSf4HPTPg6f/?lang=pt)');
 
 insert into TagsPostadas (idTag, idPost) values (3, 4), (4, 4);
 
 insert into Postagens (idUsuario, fixado, titulo, conteudo) values
-(4, true, 'Acreditação em hospital público: percepções da equipe multiprofissional',
+(1, true, 'Acreditação em hospital público: percepções da equipe multiprofissional',
 '# Acreditação em hospital público: percepções da equipe multiprofissional
 
 **Autores**: Nadia Raquel Suzini Camillo, João Lucas Campos de Oliveira, José Aparecido Bellucci Junior, Andressa Hirata Cervilheri, Maria do Carmo Fernandez Lourenço Haddad, Laura Misue Matsuda
@@ -276,10 +279,12 @@ A certificação, segundo os relatos, reforçou práticas de segurança do pacie
 ## Conclusão
 A pesquisa concluiu que a acreditação hospitalar pode ser uma ferramenta poderosa para promover a gestão da qualidade em hospitais públicos. Além de elevar o padrão dos serviços prestados, a acreditação fortalece a estrutura organizacional e o comprometimento da equipe, gerando orgulho e satisfação nos profissionais envolvidos. Dessa forma, o processo de acreditação pode ser visto como uma estratégia eficiente para alavancar a excelência em saúde no setor público brasileiro.
 
+___ 
 [Para ver o artigo completo, clique aqui.](https://www.scielo.br/j/reben/a/tLS3TNDk4JKMt4mnbGk7KSN/)');
 
 insert into TagsPostadas (idTag, idPost) values (3, 5), (4, 5);
 
+-- delete from Postagens where id = 11;
 -- select * from Tags t;
 -- select * from Postagens p;
 -- select * from TagsPostadas tp;
