@@ -1,3 +1,7 @@
+-- precisa rodar toda vez que abrir o banco
+-- show variables like 'max_allowed_packet';
+-- set global max_allowed_packet = 41820160;
+
 drop database owlpost;
 
 create database owlpost;

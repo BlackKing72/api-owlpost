@@ -14,9 +14,9 @@ insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUn
 (3, 200, 'Mililitros', 30, 'Minutos', 'Microgotas'),
 (4, 500, 'Mililitros', 6, 'Horas', 'Gotas');
 
-select * from questaocalculo qc
-     left join questaoregradetres qr on qc.id = qr.idQuestao
-     left join questaogotejamento qg on qc.id = qg.idQuestao;
+-- select * from questaocalculo qc
+--      left join questaoregradetres qr on qc.id = qr.idQuestao
+--      left join questaogotejamento qg on qc.id = qg.idQuestao;
 
 
 -- insert into QuestaoCalculo (enunciado) values
