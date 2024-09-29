@@ -66,8 +66,6 @@ create table Postagens (
     foreign key(idUsuario) references Usuarios(id) on delete cascade
 );
 
-update postagens set titulo = ?, conteudo = ?, atualizado = true, ultimaatividade = current_timestamp
-where id = ?;
 
 -- Um usuário pode favoritar apenas uma vez.
 -- buscar por idPostagem, quantas estrelas tem uma postagem.
