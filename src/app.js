@@ -1,4 +1,5 @@
 const expressFileUpload = require('express-fileupload');
+const serverless = require('serverless-http');
 const express = require('express');
 const cors = require('cors');
 
@@ -32,4 +33,4 @@ app.listen(port, () => {
     console.log(`Servidor rodando na porta: ${port}`);
 });
 
-module.exports = app;
+export const handler = serverless(app);
