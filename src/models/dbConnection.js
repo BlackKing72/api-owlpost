@@ -12,7 +12,7 @@ const dbConnection = mysql.createConnection({
     flags: '-SSL',
     ssl: {
         rejectUnauthorized: true,
-        ca: fs.readFileSync(__dirname + '../../../ca.pem')
+        ca: process.env.DB_SSL, // fs.readFileSync(__dirname + '../../../ca.pem')
     }
 });
 
