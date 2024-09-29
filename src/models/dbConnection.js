@@ -1,16 +1,24 @@
-const mysql = require('mysql');
-const database = 'owlpost';
+const mysql = require('mysql2');
+const fs = require('fs');
+
+const database = process.env.DB_NAME;
 
 const dbConnection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: database
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: database,
+    flags: '-SSL',
+    ssl: {
+        rejectUnauthorized: true,
+        ca: fs.readFileSync(__dirname + '../../../ca.pem')
+    }
 });
 
 dbConnection.connect((err) => {
     err
-        ? console.error(`Erro ao tentar conectar ao banco de dados ${database}`)
+        ? console.error(`Erro ao tentar conectar ao banco de dados ${database}. erro: ${err}`)
         : console.log(`Banco ${database} conectado com sucesso!`);
 });
 
