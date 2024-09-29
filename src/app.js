@@ -6,7 +6,7 @@ const cors = require('cors');
 const owlpostRouter = require('./routes/owlpostRouter');
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 app.use(cors({
     origin: '*',
@@ -33,4 +33,5 @@ app.listen(port, () => {
     console.log(`Servidor rodando na porta: ${port}`);
 });
 
-export const handler = serverless(app);
+module.exports = app;
+module.exports.handler = serverless(app);
