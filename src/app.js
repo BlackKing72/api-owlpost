@@ -23,8 +23,13 @@ app.use(expressFileUpload({
         fileSize: 40 * 1024 * 1024 // Limite de 40MB
     }
 }));
+
 app.use('/', owlpostRouter);
+
+app.get('/', (req, res) => res.send("Express on Vercel"));
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta: ${port}`);
 });
+
+module.exports = app;
