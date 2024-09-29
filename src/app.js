@@ -5,12 +5,13 @@ const cors = require('cors');
 const owlpostRouter = require('./routes/owlpostRouter');
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors({
     origin: '*',
     methods: ['POST', 'PUT', 'PATCH', 'DELETE', 'GET'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
 }));
 
 app.use(express.json({

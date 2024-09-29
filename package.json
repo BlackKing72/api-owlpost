@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./src/app.js",
-    "deploy": "node --env-file=dev.env --env-file=deploy.env ./src/app.js"
+    "build": "node --env-file=dev.env --env-file=deploy.env ./src/app.js"
   },
   "keywords": [],
   "author": "",
