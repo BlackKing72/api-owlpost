@@ -1,6 +1,8 @@
 # Ignore Deploy Configs
-.env
-.pem
+# ignora todos os arquivos .env menos o dev.env
+*.env
+!dev.env 
+*.pem
 
 # Vs Code Settings
 .vscode/settings.json
