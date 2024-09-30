@@ -1,10 +1,11 @@
-const mysql = require('mysql');
-const database = 'owlpost';
+const mysql = require('mysql2');
+
+const database = process.env.DB_NAME || 'owlpost';
 
 const dbConnection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASS || '',
     database: database
 });
 
