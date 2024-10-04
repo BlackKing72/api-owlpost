@@ -11,8 +11,8 @@ insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medica
 (2, 350, 'Miligramas', 1, 'Gramas', 5, 'Mililitros');
 
 insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) value
-(3, 200, 'Mililitros', 30, 'Minutos', 'Microgotas'),
-(4, 500, 'Mililitros', 6, 'Horas', 'Gotas');
+(3, 200, 'Mililitros', 30, 'Minutos', 'mgts/min'),
+(4, 500, 'Mililitros', 6, 'Horas', 'gts/min');
 
 -- select * from questaocalculo qc
 --      left join questaoregradetres qr on qc.id = qr.idQuestao
