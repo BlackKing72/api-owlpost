@@ -1,3 +1,7 @@
+-- precisa rodar toda vez que abrir o banco
+-- show variables like 'max_allowed_packet';
+-- set global max_allowed_packet = 41820160;
+
 drop database owlpost;
 
 create database owlpost;
@@ -61,6 +65,7 @@ create table Postagens (
     
     foreign key(idUsuario) references Usuarios(id) on delete cascade
 );
+
 
 -- Um usuário pode favoritar apenas uma vez.
 -- buscar por idPostagem, quantas estrelas tem uma postagem.

@@ -94,11 +94,28 @@ router.put('/', (req, res) => {
     });
 });
 
+router.patch('/', (req, res) => {
+    const { id, username } = req.body;
+
+    const query = `update Usuarios set nome = ? where id = ?`;
+    dbConnection.query(query, [username, id], (err, results) => {
+        if (err) {
+            return res.status(httpStatus.InternalError).json({ 
+                mensagem: `Erro ao tentar atualizar o nome de usuário. erro: ${err}` 
+            });
+        }
+
+        res.json({
+            mensagem: `Nome de usuário atualizado com sucesso.`
+        });
+    });
+})
+
 /* 
 Atualiza a foto de perfil do usuário. Usa o form-data para enviar a imagem para 
 o banco de dados como binário.
 */
-router.patch('/', (req, res) => {
+router.patch('/updatePic', (req, res) => {
     const { id } = req.body;
 
     // a foto de perfil não vem pelo body pq está usando o form-data.
@@ -106,7 +123,7 @@ router.patch('/', (req, res) => {
     const fotoFormato = fotoPerfil.mimetype;    // mimetype é o formato da imagem. ex: imagem/png.
     const fotoPerfilBuffer = fotoPerfil.data;   // o binário que vai ser salvo no banco.
     
-    const query = `update Usuarios set fotoFormato = ?, fotoPerfil = ? where id = ?`;
+    const query = `update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?`;
     dbConnection.query(query, [fotoPerfilBuffer, fotoFormato, id], (err, results) => {
         if (err) {
             console.error(`Erro ao tentar atualizar a foto de perfil. erro: ${err}`);
@@ -118,6 +135,23 @@ router.patch('/', (req, res) => {
 
         res.json({
             mensagem: `Foto de perfil atualizada com sucesso.`
+        });
+    });
+});
+
+router.patch('/deletePic', (req, res) => {
+    const { id } = req.body;
+
+    const query = `update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?`;
+    dbConnection.query(query, [null, null, id], (err, results) => {
+        if (err) {
+            return res.status(httpStatus.InternalError).json({ 
+                mensagem: `Erro ao tentar remover a foto de perfil. erro: ${err}` 
+            });
+        }
+
+        res.json({
+            mensagem: `Foto de perfil removida com sucesso.`
         });
     });
 });

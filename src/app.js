@@ -13,8 +13,15 @@ app.use(cors({
     allowedHeaders: ['Content-Type']
 }));
 
-app.use(express.json());
-app.use(expressFileUpload());
+app.use(express.json({
+    limits: '40mb'
+}));
+
+app.use(expressFileUpload({
+    limits: {
+        fileSize: 40 * 1024 * 1024 // Limite de 40MB
+    }
+}));
 app.use('/', owlpostRouter);
 
 // app.listen(port, () => {

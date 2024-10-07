@@ -90,4 +90,60 @@ router.get('/filter', (req, res) => {
     });
 });
 
-module.exports = router
+router.post('/', (req, res) => {
+    const { userID, title, content } = req.body;
+    const query = `insert into Postagens (idUsuario, titulo, conteudo) values (?, ?, ?)`;
+
+    dbConnection.query(query, [userID, title, content], (err, results) => {
+        if (err) {
+            console.error(`Erro ao criar postagem. erro: ${err}`);
+            return;
+        }
+
+        res.json({
+            message: `Postagem criada com sucesso`,
+            postID: results.insertId
+        });
+    });
+});
+
+router.patch('/', (req, res) => {
+    const { postID, title, content } = req.body;
+    const query = `update postagens set titulo = ?, conteudo = ?, atualizado = true, ultimaatividade = current_timestamp where id = ?;`
+    dbConnection.query(query, [title, content, postID], (err, results) => {
+        if (err) {
+            console.error(`Erro ao atualizar uma postagem. erro: ${err}`);
+            return;
+        }
+
+        res.json({ mensagem: `Postagem atualizada com sucesso.` });
+    });
+});
+
+router.patch('/pin', (req, res) => {
+    const { postID, isPinned } = req.body;
+    const query = `update postagens set fixado = ?, where id = ?;`
+    dbConnection.query(query, [isPinned, postID], (err, results) => {
+        if (err) {
+            console.error(`Erro ao atualizar uma postagem. erro: ${err}`);
+            return;
+        }
+
+        res.json({ mensagem: `Postagem atualizada com sucesso.` });
+    });
+});
+
+router.delete('/:postID', (req, res) => {
+    const { postID } = req.params;
+    const query = `delete from Postagens where id = ?`;
+    dbConnection.query(query, [postID], (err, results) => {
+        if (err) {
+            console.error(`Erro ao deletar uma postagem. erro: ${err}`);
+            return;
+        }
+
+        res.json({ mensagem: `Postagem deletada com sucesso.` });
+    }) 
+});
+
+module.exports = router;

@@ -3,10 +3,10 @@ const mysql = require('mysql2');
 const database = process.env.DB_NAME || 'owlpost';
 
 const dbConnection = mysql.createConnection({
-    host: process.env.DB_HOST,
+    host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASS || '',
     database: database,
     ssl: {
         rejectUnauthorized: true,
