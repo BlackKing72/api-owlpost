@@ -20,7 +20,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
-                    "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+                    "value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
                 },
                 {
                     "key": "Access-Control-Allow-Headers",
@@ -28,5 +28,10 @@
                 }
             ]
         }
-    ]
+    ],
+    "functions": {
+        "api/*.js": {
+            "maxDuration": 30
+        }
+    }
 }
