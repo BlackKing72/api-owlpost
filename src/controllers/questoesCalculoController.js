@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
     if (id) {
         query += ` where qc.id = ?`;
     }
-    
+
     if (random) {
         query += ` order by rand()`;
     }
@@ -34,8 +34,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const { 
-        tipo, enunciado, 
+    const {
+        tipo, enunciado,
         prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade,
         volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade
     } = req.body;
@@ -51,61 +51,68 @@ router.post('/', (req, res) => {
         Se o ultimo falha o banco já teria criado uma entrada invalida na tabela e provocaria
         outros erros na API. Com a transação isso pode ser revertido quando um erro ocorrer.
     */
-    dbConnection.beginTransaction((err) => {
+    dbConnection.getConnection((err, connection) => {
         if (err) {
-            console.error(`Erro ao iniciar transação para criar uma questão. erro: ${err}`);
+            console.error(`Erro ao buscar conexão para criar uma questão. erro: ${err}`);
             return;
         }
-
-        const queryQuestao = `insert into QuestaoCalculo (enunciado) values (?)`;
-        dbConnection.query(queryQuestao, [enunciado], (err, results) => {
+        
+        connection.beginTransaction((err) => {
             if (err) {
-                // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
-                return dbConnection.rollback(() => {
-                    console.error(`Erro ao criar questão. erro: ${err}`);
-                });
-            }
-
-            const idQuestao = results.insertId;
-
-            let query = '';
-            let valores = [];
-
-            const questaoRegraDeTres = 0;
-            const questaoGotejamento = 1;
-
-            if (tipo === questaoRegraDeTres) {
-                query = `insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values (?, ?, ?, ?, ?, ?, ?)`;
-                valores = [idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade];
-            }
-            else if (tipo === questaoGotejamento) {
-                query = `insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values (?, ?, ?, ?, ?, ?)`;
-                valores = [idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade];
-            }
-            else {
-                // Para evitar que um tipo invalido seja inserido no banco
-                console.error(`Tipo da questão é inválido (${tipo}).`);
+                console.error(`Erro ao iniciar transação para criar uma questão. erro: ${err}`);
                 return;
             }
 
-            dbConnection.query(query, valores, (err, results) => {
+            const queryQuestao = `insert into QuestaoCalculo (enunciado) values (?)`;
+            connection.query(queryQuestao, [enunciado], (err, results) => {
                 if (err) {
                     // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
-                    return dbConnection.rollback(() => {
+                    return connection.rollback(() => {
                         console.error(`Erro ao criar questão. erro: ${err}`);
                     });
                 }
-                
-                // Aplica as mudanças que ocorreram no banco durante a transação
-                dbConnection.commit((err) => {
+
+                const idQuestao = results.insertId;
+
+                let query = '';
+                let valores = [];
+
+                const questaoRegraDeTres = 0;
+                const questaoGotejamento = 1;
+
+                if (tipo === questaoRegraDeTres) {
+                    query = `insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade) values (?, ?, ?, ?, ?, ?, ?)`;
+                    valores = [idQuestao, prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade];
+                }
+                else if (tipo === questaoGotejamento) {
+                    query = `insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) values (?, ?, ?, ?, ?, ?)`;
+                    valores = [idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade];
+                }
+                else {
+                    // Para evitar que um tipo invalido seja inserido no banco
+                    console.error(`Tipo da questão é inválido (${tipo}).`);
+                    return;
+                }
+
+                connection.query(query, valores, (err, results) => {
                     if (err) {
                         // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
-                        return dbConnection.rollback(() => {
+                        return connection.rollback(() => {
                             console.error(`Erro ao criar questão. erro: ${err}`);
                         });
-                    }   
+                    }
 
-                    res.json(results);
+                    // Aplica as mudanças que ocorreram no banco durante a transação
+                    connection.commit((err) => {
+                        if (err) {
+                            // Desfaz qualquer alteração que ocorreu no banco desde o inicio da transação.
+                            return connection.rollback(() => {
+                                console.error(`Erro ao criar questão. erro: ${err}`);
+                            });
+                        }
+
+                        res.json(results);
+                    });
                 });
             });
         });
@@ -162,7 +169,7 @@ router.post('/', (req, res) => {
 }); */
 
 router.patch('/', (req, res) => {
-    const { id, tipo, enunciado, 
+    const { id, tipo, enunciado,
         prescricao, prescricaoUnidade, medicacao, medicacaoUnidade, diluente, diluenteUnidade,
         volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade
     } = req.body;
