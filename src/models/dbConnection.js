@@ -14,7 +14,7 @@ const getPool = () => {
             password: process.env.DB_PASS || '',
             database: database,
             waitForConnections: true,
-            connectionLimit: 10,
+            connectionLimit: process.env.DB_MAX_CONNECTIONS || 10,
             queueLimit: 0,
             ssl: {
                 rejectUnauthorized: true,
