@@ -43,7 +43,7 @@ router.get('/user/', (req, res) => {
 });
 
 router.get('/filter', (req, res) => {
-    const { withTags, withoutTags, title, orderBy, sort } = req.query;
+    const { withTags, withoutTags, search, orderBy, sort } = req.query;
 
     let query = `
         select distinct p.* from Postagens p
@@ -62,9 +62,9 @@ router.get('/filter', (req, res) => {
         values.push(`${withoutTags}`);
     }
 
-    if (title) {
+    if (search) {
         conditions.push(`p.titulo like ?`);
-        values.push(`%${title}%`);
+        values.push(`%${search}%`);
     }
 
     if (conditions.length > 0) {
