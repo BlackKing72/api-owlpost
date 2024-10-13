@@ -56,7 +56,7 @@ router.post('/', (req, res) => {
             console.error(`Erro ao buscar conexão para criar uma questão. erro: ${err}`);
             return;
         }
-        
+
         connection.beginTransaction((err) => {
             if (err) {
                 console.error(`Erro ao iniciar transação para criar uma questão. erro: ${err}`);

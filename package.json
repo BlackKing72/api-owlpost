@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src/app.js"
+    "start": "nodemon ./src/server.js",
+    "start-server": "node --env-file=dev.env --env-file=deploy.env ./src/server.js",
+    "build-vercel": "echo building"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,7 @@
     "express": "^4.19.2",
     "express-fileupload": "^1.5.1",
     "mysql2": "^3.11.3",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "vercel": "^37.6.0"
   }
 }

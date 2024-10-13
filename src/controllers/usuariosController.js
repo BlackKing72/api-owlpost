@@ -11,15 +11,19 @@ router.get("/", (req, res) => {
     const query = `select * from Usuarios`;
     dbConnection.query(query, (err, results) => {
         if (err) {
-            return res.status(httpStatus.InternalError).json({ 
-                mensagem: `Erro ao buscar usuários. erro: ${err}`
-            });
+            console.error(`Erro ao buscar usuários. erro: ${err}`);
+            return;
+            // return res.status(httpStatus.InternalError).json({ 
+            //     mensagem: `Erro ao buscar usuários. erro: ${err}`
+            // });
         }
 
         if (results.length === 0) {
-            return res.status(httpStatus.NotFound).json({ 
-                mensagem: 'Usuários não encontrados.' 
-            });
+            console.error('Usuários não encontrados.');
+            return;
+            // return res.status(httpStatus.NotFound).json({ 
+            //     mensagem: 'Usuários não encontrados.' 
+            // });
         }
 
         res.json({
@@ -38,15 +42,19 @@ router.get("/:id", (req, res) => {
     const query = `select * from Usuarios where id = ?`;
     dbConnection.query(query, [id], (err, results) => {
         if (err) {
-            return res.status(httpStatus.InternalError).json({ 
-                mensagem: `Erro ao buscar usuário. erro: ${err}` 
-            });
+            console.error(`Erro ao buscar usuário. erro: ${err}`);
+            return;
+            // return res.status(httpStatus.InternalError).json({ 
+            //     mensagem: `Erro ao buscar usuário. erro: ${err}` 
+            // });
         }
 
         if (results.length === 0) {
-            return res.status(httpStatus.NotFound).json({ 
-                mensagem: 'Usuário não encontrado.' 
-            });
+            console.error('Usuários não encontrados.');
+            return;
+            // return res.status(httpStatus.NotFound).json({ 
+            //     mensagem: 'Usuário não encontrado.' 
+            // });
         }
 
         res.json({
@@ -73,9 +81,11 @@ router.put('/', (req, res) => {
 
     dbConnection.query(query, [nome, email, senha, fotoPerfilBuffer, fotoFormato], (err, results) => {
         if (err) {
-            return res.status(httpStatus.InternalError).json({ 
-                mensagem: `Erro ao criar usuário. erro: ${err}` 
-            });
+            console.error(`Erro ao criar usuário. erro: ${err}`);
+            return;
+            // return res.status(httpStatus.InternalError).json({ 
+            //     mensagem: `Erro ao criar usuário. erro: ${err}` 
+            // });
         }
 
         res.json({
@@ -116,9 +126,11 @@ router.patch('/updatePic', (req, res) => {
     const query = `update Usuarios set fotoPerfil = ?, fotoFormato = ? where id = ?`;
     dbConnection.query(query, [fotoPerfilBuffer, fotoFormato, id], (err, results) => {
         if (err) {
-            return res.status(httpStatus.InternalError).json({ 
-                mensagem: `Erro ao tentar atualizar a foto de perfil. erro: ${err}` 
-            });
+            console.error(`Erro ao tentar atualizar a foto de perfil. erro: ${err}`);
+            return;
+            // return res.status(httpStatus.InternalError).json({ 
+            //     mensagem: `Erro ao tentar atualizar a foto de perfil. erro: ${err}` 
+            // });
         }
 
         res.json({

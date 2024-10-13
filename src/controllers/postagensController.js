@@ -109,7 +109,7 @@ router.post('/', (req, res) => {
 
 router.patch('/', (req, res) => {
     const { postID, title, content } = req.body;
-    const query = `update postagens set titulo = ?, conteudo = ?, atualizado = true, ultimaatividade = current_timestamp where id = ?;`
+    const query = `update Postagens set titulo = ?, conteudo = ?, atualizado = true, ultimaatividade = current_timestamp where id = ?;`
     dbConnection.query(query, [title, content, postID], (err, results) => {
         if (err) {
             console.error(`Erro ao atualizar uma postagem. erro: ${err}`);
@@ -122,7 +122,7 @@ router.patch('/', (req, res) => {
 
 router.patch('/pin', (req, res) => {
     const { postID, isPinned } = req.body;
-    const query = `update postagens set fixado = ?, where id = ?;`
+    const query = `update Postagens set fixado = ?, where id = ?;`
     dbConnection.query(query, [isPinned, postID], (err, results) => {
         if (err) {
             console.error(`Erro ao atualizar uma postagem. erro: ${err}`);
