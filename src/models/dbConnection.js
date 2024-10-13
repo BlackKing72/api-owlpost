@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const fs = require('fs');
 
 const database = process.env.DB_NAME || 'owlpost';
+const hasSSL = process.env.DB_SSL || false;
 
 let pool;
 
@@ -14,9 +15,9 @@ const getPool = () => {
             password: process.env.DB_PASS || '',
             database: database,
             waitForConnections: true,
-            connectionLimit: process.env.DB_MAX_CONNECTIONS || 10,
+            connectionLimit: process.env.DB_MAX_CONNECTIONS || 25,
             queueLimit: 0,
-            ssl: {
+            ssl: !hasSSL ? undefined : {
                 rejectUnauthorized: true,
                 ca: process.env.DB_SSL || fs.readFileSync(__dirname + '../../../ca.pem')
             }
