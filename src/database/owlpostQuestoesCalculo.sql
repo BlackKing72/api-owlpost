@@ -51,8 +51,6 @@ insert into QuestaoRegraDeTres (idQuestao, prescricao, prescricaoUnidade, medica
 (20, 750.0, 'Miligramas', 1.0, 'Gramas', 10.0, 'Mililitros');
 
 insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUnidade, destinoUnidade) value
-(3, 200, 'Mililitros', 30, 'Minutos', 'mgts/min'),
-(4, 500, 'Mililitros', 6, 'Horas', 'gts/min'),
 (3, 200.0, 'Mililitros', 30.0, 'Minutos', 'mgts/min'),
 (4, 500.0, 'Mililitros', 6.0, 'Horas', 'gts/min'),
 (6, 1800.0, 'Mililitros', 12.0, 'Horas', 'gts/min'),
@@ -68,9 +66,9 @@ insert into QuestaoGotejamento (idQuestao, volume, volumeUnidade, tempo, tempoUn
 (29, 800.0, 'Mililitros', 6.0, 'Horas', 'gts/hora'),
 (30, 1500.0, 'Mililitros', 12.0, 'Horas', 'gts/hora');
 
-select * from QuestaoCalculo qc
-     left join QuestaoRegraDeTres qr on qc.id = qr.idQuestao
-     left join QuestaoGotejamento qg on qc.id = qg.idQuestao;
+-- select * from QuestaoCalculo qc
+--      left join QuestaoRegraDeTres qr on qc.id = qr.idQuestao
+--      left join QuestaoGotejamento qg on qc.id = qg.idQuestao;
 
 -- insert into QuestaoCalculo (enunciado) values
 -- ('test01'),
