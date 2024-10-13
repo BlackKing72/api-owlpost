@@ -7,6 +7,7 @@ const amigosController = require('../controllers/amigosController');
 const postagensController = require('../controllers/postagensController');
 const tagsController = require('../controllers/tagsController');
 const tagPostadasController = require('../controllers/tagsPostadasController');
+const estrelasController = require('../controllers/estrelasController');
 
 const conquistasController = require('../controllers/conquistasController');
 
@@ -18,6 +19,7 @@ router.use('/amigos', amigosController);
 router.use('/tags', tagsController);
 router.use('/postagens', postagensController);
 router.use('/post-tags', tagPostadasController);
+router.use('/estrelas', estrelasController);
 
 router.use('/conquistas', conquistasController);
 
