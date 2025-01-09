@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/BlackKing72/api-owlpost" style="filter: drop-shadow(0 0 1px #fafaff80)">
+  <a href="https://github.com/BlackKing72/api-owlpost">
     <img src="images/owlpost_logo.png" alt="Logo" width="100" height="100">
   </a>
   <h3 align="center">Owlpost API</h3>
@@ -11,7 +11,7 @@
 
 Foi criada usando [Node.js][node-url] e [Express][express-url]. A API gerencia as postagens, usuários do site e as perguntas do minigame.
 
-Este projeto foi criado como parte de um trabalho escolar, Projeto Integrador (P.I), com o objetivo de demonstrar habilidades adquiridas no decorrer das unidade curriculares.
+Este projeto foi criado como parte de um trabalho escolar, [Projeto Integrador (P.I)](#sobre-o-projeto-integrador), com o objetivo de demonstrar habilidades adquiridas no decorrer das unidade curriculares.
 
 <br/>
 
@@ -63,44 +63,45 @@ Este projeto foi criado como parte de um trabalho escolar, Projeto Integrador (P
 ## Como executar o projeto
 
 1. Clone o repositório:
-
-```sh
-git clone https://github.com/BlackKing72/api-owlpost/
-```
+    ```sh
+    git clone https://github.com/BlackKing72/api-owlpost/
+    ```
 
 2. Acesse a pasta do projeto:
+    ```sh
+    cd owlpost-api
+    ```
 
-```sh
-cd owlpost-api
-```
 3. Instale as dependências:
+    ```sh
+    npm install
+    ``` 
+    
+4. Você vai precisar de um banco de dados MySQL. Configure o banco usando os scripts da pasta `src/database/`
+    - `owlpost.sql`: configuração básica do banco de dados.
+    - `owlpostUsers.sql`: adiciona alguns usuários para teste.
+    - `owlpostPostagens.sql`: adiciona algumas postagens para teste.
+    - `owlpostQuestoesCalculo.sql`: adiciona as questões para o minigame ([Owlcalc](https://github.com/BlackKing72/owlcalc/))
 
-```sh
-npm install
-``` 
+5. Configure o arquivo .env com as variáveis necessárias.  
+    ```env
+    # Configuração padrão da API
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=owlpost
+    DB_USER=root
+    DB_PASS=
+    ```
 
-4. Configure o arquivo .env com as variáveis necessárias.  
+6. Inicie o servidor:
+  ```sh
+  npm start
+  ```
 
-```env
-# Configurações padrão do banco de dados
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=owlpost
-DB_USER=root
-DB_PASS=
-```
-
-5. Inicie o servidor:
-
-```sh
-npm start
-```
-
-6. A API estará disponível em:
-
-```
-http://localhost:3000
-```
+7. A API estará disponível em http://localhost:3000/. Teste uma das rotas.
+  ```
+  http://localhost:3000/usuarios/
+  ```
 
 <br/>
 
