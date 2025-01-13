@@ -1,11 +1,15 @@
 <div align="center">
-  <a href="https://github.com/BlackKing72/api-owlpost">
-    <img src="images/owlpost_logo.png" alt="Logo" width="100" height="100">
-  </a>
-  <h3 align="center">Owlpost API</h3>
-  <p align="center">
-    Uma API desenvolvida para os projetos Owlpost e Owlcalc. 
-  </p>
+    <a href="https://github.com/BlackKing72/api-owlpost">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/e9b25d79-14b9-495d-82e8-a099e95263e5">
+          <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/8488d32e-b04f-4179-8253-0524a2249bab">
+          <img alt="Logo" src="https://github.com/user-attachments/assets/8488d32e-b04f-4179-8253-0524a2249bab" width="100" height="100">
+        </picture>
+      </a>
+      <h3 align="center">Owlpost API</h3>
+      <p align="center">
+        Uma API desenvolvida para os projetos Owlpost e Owlcalc. 
+      </p>
 </div>
 <br/>
 
